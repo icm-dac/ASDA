@@ -8,138 +8,99 @@ This repository contains code that is currently under review for publication. Pl
 
 ## Overview
 
-This pipeline is designed to automatically detect, classify, and analyze colored spots in microscopy images. The tool provides a comprehensive GUI-based solution for spot detection using HSV color space analysis, with advanced clustering capabilities and statistical analysis. Originally developed for biological imaging applications where precise spot counting and spatial analysis are critical.
+This pipeline automatically detects, classifies, and analyzes colored spots in microscopy images. Originally developed for biological imaging applications where precise spot counting and spatial analysis are critical, it provides a comprehensive GUI-based solution using HSV color space analysis with advanced clustering capabilities.
 
 ## Features
 
-The pipeline includes an interactive GUI interface built with PyQt5 that makes spot analysis straightforward. It can detect and classify spots across 24+ predefined colors using HSV color space analysis, with an advanced clustering system that groups spots by color similarity when needed. The tool provides interactive ROI selection for marking injection sites, automatically preprocesses images by extracting foreground elements and detecting bounding boxes, then performs comprehensive statistical analysis of distances and neighbor relationships. 
+- **Interactive GUI** built with PyQt5 for straightforward analysis
+- **Multi-color detection** across 24+ predefined colors using HSV color space
+- **Advanced clustering** system that groups spots by color similarity
+- **Interactive ROI selection** for marking injection sites
+- **Automatic preprocessing** with foreground extraction and bounding box detection
+- **Comprehensive statistics** including distances and neighbor relationships
+- **Excel export** with detailed measurements
+- **Rich visualizations** with annotated images, arrows, and overlays
+- **Statistical analysis** with violin plots and significance testing
 
-Results are exported to Excel spreadsheets with detailed measurements, while the visualization system generates annotated images with arrows and overlays. The statistical analysis includes violin plots with significance testing to help interpret the data.
+## Installation
 
-## Dependencies
-
-```python
-- PyQt5
-- OpenCV (cv2)
-- NumPy
-- Pandas
-- Matplotlib
-- Seaborn
-- scikit-image
-- scipy
-- scikit-learn
-- tqdm
-```
-
-## Installation Requirements
-
+### Dependencies
 ```bash
 pip install PyQt5 opencv-python numpy pandas matplotlib seaborn scikit-image scipy scikit-learn tqdm
 ```
 
-## File Structure
+### Requirements
+- **Python**: 3.8+
+- **Supported image formats**: .png, .jpg, .jpeg, .tif, .tiff
+- **Input images**: RGB format (RGBA automatically converted)
+- **Recommendation**: High contrast images for optimal detection
 
-The application creates organized output directories:
-```
-output_directory/
-├── [image_name]/
-│   ├── [image_name]_spot_analysis.xlsx
-│   ├── [image_name]_spot_analysis_overview_arrows.png
-│   ├── [image_name]_spot_analysis_[color]_arrows.png
-│   ├── [image_name]_spot_analysis_[color].png
-│   ├── [image_name]_distance_distribution.svg
-│   ├── [image_name]_neighbor_distribution.svg
-│   └── [image_name]_same_color_distribution.svg
-```
+## Usage
 
-## Input Image Requirements
-
-- **Supported formats**: .png, .jpg, .jpeg, .tif, .tiff
-- **Color space**: RGB images (RGBA automatically converted)
-- **Resolution**: Any resolution supported
-- **Image quality**: High contrast recommended for optimal spot detection
-
-
-
-## Configuration Parameters
-
-The basic settings include adjusting the key fraction (defaults to 0.25), which determines what proportion of the image width is used for color key detection. There's also a buffer parameter (default 50 pixels) that controls the pixel buffer for key region exclusion, and a debug mode that enables additional diagnostic output when you need to troubleshoot detection issues.
-
-For more advanced usage, you can set the number of K-means clusters for color grouping, setting this to 0 disables clustering entirely. The system also includes customizable distance thresholds for spot merging and classification, along with area filters that set minimum and maximum area constraints for spot validation.
-
-## Usage Instructions
-
-### 1. Launch Application
+### Quick Start
 ```bash
-python spot_analysis.py
+python main.py
 ```
 
-### 2. Load Input Image
-- Click "Browse" next to "Input Image"
-- Select your microscopy image file
-- Image appears in left panel
+### Step-by-Step Process
+1. **Load Image**: Browse and select your microscopy image
+2. **Set Output**: Choose destination directory for results  
+3. **Configure Parameters**: Adjust settings as needed (see Configuration below)
+4. **Mark Injection Site**: Draw rectangle around injection point and confirm
+5. **Run Analysis**: Click "Run Analysis" and monitor progress
+6. **View Results**: Visualizations appear in right panel when complete
 
-### 3. Select Output Directory
-- Click "Browse" next to "Output Dir"
-- Choose destination folder for results
+### Configuration Parameters
 
-### 4. Configure Parameters
-- Adjust "Key Fraction" and "Buffer" as needed
-- Set "K-Means Clusters" if clustering desired
-- Enable "Debug" for detailed console output
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| Key Fraction | 0.25 | Proportion of image width used for color key detection |
+| Buffer | 50 | Pixel buffer around key region |
+| K-Means Clusters | 0 | Number of clusters for color grouping (0 = disabled) |
+| Debug Mode | Off | Enable detailed diagnostic output |
 
-### 5. Mark Injection Site
-- Draw a small rectangle around the injection point
-- Click "Select Injection Site"
-- Confirm the selection in the dialog
+## Output
 
-### 6. Run Analysis
-- Click "Run Analysis"
-- Monitor progress in console and progress bar
-- Results appear in right panel when complete
+### File Structure
+```
+output_directory/[image_name]/
+├── [image_name]_analysis_results.xlsx
+├── [image_name]_overview_arrows.png
+├── [image_name]_[color]_spots.png
+├── [image_name]_[color]_arrows.png
+├── [image_name]_distance_distribution.svg
+├── [image_name]_neighbor_distribution.svg
+└── [image_name]_same_color_distribution.svg
+```
 
-## Output Description
-
-### Excel Spreadsheet
-Contains detailed measurements for each detected spot:
+### Data Export (Excel)
+Each detected spot includes:
 - **Spot_ID**: Unique identifier within color group
 - **Centroid_X/Y**: Pixel coordinates of spot center
 - **Area**: Spot area in pixels
 - **Distance_to_Injection**: Euclidean distance from injection site
-- **Nearest_Neighbor_Distance**: Distance to closest spot of any color
+- **Nearest_Neighbor_Distance**: Distance to closest spot (any color)
 - **Nearest_Neighbor_Color**: Color of nearest neighboring spot
-- **Nearest_Same_Color_Distance**: Distance to nearest spot of same color
+- **Nearest_Same_Color_Distance**: Distance to nearest same-color spot
 - **Intensity**: Average pixel intensity of spot region
 
-### Visualization Images
-- **No-arrows images**: Spots marked with colored circles and IDs
-- **Arrow images**: Spots connected to injection site with directional arrows
+### Visualizations
+- **Spot plots**: Colored circles with IDs (with/without arrows to injection site)
 - **Overview image**: All colors displayed together with arrows
+- **Statistical plots**: Violin plots with Mann-Whitney U significance testing
 
-### Statistical Plots
-- **Distance Distribution**: Violin plots showing distance to injection site by color
-- **Neighbor Distribution**: Analysis of inter-spot distances
-- **Same-Color Distribution**: Clustering analysis within color groups
-- **Significance Testing**: Mann-Whitney U tests with significance markers
+## Performance & Limitations
 
-### File Output Structure
-```
-[image_name]_spot_analysis.xlsx
-[image_name]_spot_analysis_overview_arrows.png
-[image_name]_spot_analysis_[color]_arrows.png
-[image_name]_spot_analysis_[color].png
-[image_name]_distance_distribution.svg
-[image_name]_neighbor_distribution.svg
-[image_name]_same_color_distribution.svg
-```
+### Performance
+- Memory usage scales with image size
+- Processing time depends on image complexity and spot count
+- Single-threaded processing
 
-## Performance Considerations
-
-Memory usage scales linearly with image size, so larger images will use more RAM during processing. Processing time depends mainly on image complexity and how many spots are detected - more spots means longer analysis times. Currently the tool handles one image at a time rather than batch processing.
-
-## Limitations
-
-Right now the tool processes one image at a time rather than offering batch processing capabilities. Memory usage can get pretty high with very large images, and processing time increases with the number of detected spots. You also need to manually select the injection site for each image rather than having it detected automatically.
+### Current Limitations
+- One image at a time (no batch processing)
+- High memory usage with very large images
+- Manual injection site selection required
+- Processing time increases with spot density
 
 ## License
 
