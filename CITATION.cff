@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+title: "ASDA: Automated Spot Detection & Analysis"
+message: "Please cite the authors below."
+type: software
+authors:
+  - family-names: Verreault
+    given-names: Maité
+    affiliation: Sorbonne Université, Institut du Cerveau—Paris Brain Institute—ICM, CNRS, Inria, Inserm, AP-HP, Hôpital de la Pitié Salpêtrière, F-75013 Paris
+  - family-names: Arslan
+    given-names: Janan
+    affiliation: Sorbonne Université, Institut du Cerveau—Paris Brain Institute—ICM, CNRS, Inria, Inserm, AP-HP, Hôpital de la Pitié Salpêtrière, F-75013 Paris
+repository-code: github.com/icm-dac/ASDA
+date-released: 2025-08-20
+version: "review-1"
+preferred-citation:
+  type: article
+  title: "Manuscript under peer review"
+  authors:
+    - family-names: Verreault
+      given-names: Maité
+    - family-names: Arslan
+      given-names: Janan
+  year: 2025
+  notes: "Final citation will be updated upon acceptance."
